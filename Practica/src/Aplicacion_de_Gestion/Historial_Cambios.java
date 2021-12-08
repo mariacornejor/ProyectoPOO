@@ -6,8 +6,11 @@ public class Historial_Cambios {
 	private String estado;
 	private Date fecha_cambio;
 	
-	public Historial_Cambios() {
-		// TODO Auto-generated constructor stub
+	public Historial_Cambios(String descripcion, String estado) {
+		
+		this.descripcion = descripcion;
+		this.estado = estado;
+		this.fecha_cambio = new Date();
 	}
 
 	
