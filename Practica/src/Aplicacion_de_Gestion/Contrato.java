@@ -2,6 +2,8 @@ package Aplicacion_de_Gestion;
 
 import java.util.ArrayList;
 
+import Comparadores.CriterioTurnosDia;
+
 public class Contrato {
 	protected int num_semana;
 	protected int cant_horas_contrato;
@@ -18,11 +20,22 @@ public class Contrato {
 	
 	private boolean Validar_Turnos(ArrayList<Turno> Turno) {
 		///TODO Validar dias consecutivos y no menos de 24 horas entre turnos
+		if(turnos.size()*8 != cant_horas_contrato) {
+			return false;
+		}
 		
+		turnos.sort(new CriterioTurnosDia());
+		for(int i=0; i<this.turnos.size()-1 ;i++) {
+			if(this.turnos.get(i).getDia()+1 != this.turnos.get(i+1).getDia()) {
+				return false;
+			}
+		}
+		
+
+		return true;
 	}
 	
 	public boolean Hacer_Cambio(Turno Turno_IN, Turno Turno_OUT) {
-		
 		this.turnos.remove(Turno_OUT);
 		this.turnos.add(Turno_IN);
 		if(Validar_Turnos(this.turnos))
@@ -73,6 +86,11 @@ public class Contrato {
 		this.finde_libre = finde_libre;
 	}
 	
-	
+	public ArrayList<Turno> getTurnos() {
+		return turnos;
+	}
+	public void setTurnos(ArrayList<Turno> turnos) {
+		this.turnos = turnos;
+	}
 
 }

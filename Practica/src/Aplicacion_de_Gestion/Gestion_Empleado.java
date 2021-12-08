@@ -62,7 +62,7 @@ public class Gestion_Empleado {
 		}
 		e.setEstado_empleado(false); ///Despedido para que no se le asignen contratos 
 		this.empleados.add(e); ///Agrego el empleado despedido, asi mantengo los datos de la semanas anteriores
-
+		return true;
 	}
 
 	public void Cambio_Turno_Entre_Empleado(Calendario Calendario1, Calendario Calendario2) {
@@ -78,7 +78,6 @@ public class Gestion_Empleado {
 	}
 
 	public ArrayList<Calendario> Generar_Calendario(int semana) {
-		///TODO recopila datos 
 		this.calendario_Semana_Activa =  new ArrayList<Calendario>();
 		for(Empleado e: this.empleados)
 		{
@@ -94,7 +93,8 @@ public class Gestion_Empleado {
 				}
 			}
 		}
-
+		
+		return this.calendario_Semana_Activa;
 	}
 
 	public void Asignar_Vacaciones(int cod_empleado, int semana_vacaciones) {
@@ -102,6 +102,14 @@ public class Gestion_Empleado {
 	}
 
 	public void Imprimir_Calendario_Semanal() {
+		//Ordeno
+		this.calendario_Semana_Activa.sort(new Comparadores.CriterioCalendario());
+		//Imprimo
+		int d=0;
+		for(Calendario c: this.calendario_Semana_Activa)
+		{
+			System.out.print("Semana");
+		}
 
 	}
 
@@ -170,10 +178,5 @@ public class Gestion_Empleado {
 	public void setHistorial_Cambios_Empresa(ArrayList<Historial_Cambios> historial_Cambios_Empresa) {
 		Historial_Cambios_Empresa = historial_Cambios_Empresa;
 	}
-
-
-
-
-
 
 }
