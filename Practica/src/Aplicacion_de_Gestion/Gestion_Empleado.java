@@ -30,11 +30,6 @@ public class Gestion_Empleado {
 		this.codigos_empleado++;
 		empleado.setEstado_empleado(true);
 		empleado.setPuesto("Empleado");
-		
-		
-		
-		
-
 	}
 
 	public boolean Despedir_Empleado(Empleado Empleado_IN, Empleado Empleado_OUT) {
@@ -130,10 +125,5 @@ public class Gestion_Empleado {
 	public void setHistorial_Cambios_Empresa(ArrayList<Historial_Cambios> historial_Cambios_Empresa) {
 		Historial_Cambios_Empresa = historial_Cambios_Empresa;
 	}
-
-
-
-
-
 
 }
