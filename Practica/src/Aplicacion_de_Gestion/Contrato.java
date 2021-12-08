@@ -26,12 +26,16 @@ public class Contrato {
 		
 		turnos.sort(new CriterioTurnosDia());
 		for(int i=0; i<this.turnos.size()-1 ;i++) {
-			if(this.turnos.get(i).getDia()+1 != this.turnos.get(i+1).getDia()) {
+			if(this.turnos.get(i).getDia()+1 != this.turnos.get(i+1).getDia()) { //dia consecutivo
+				return false;
+			}
+			
+			int turno1 = this.turnos.get(i).getDia()*3 + this.turnos.get(i).getHorario().ordinal();
+			int turno2 = this.turnos.get(i).getDia()*3 + this.turnos.get(i).getHorario().ordinal();
+			if(Math.abs((turno2-turno1)) < 3) { //no menos de 24h
 				return false;
 			}
 		}
-		
-
 		return true;
 	}
 	
@@ -52,12 +56,10 @@ public class Contrato {
 		}	
 	}
 
-
 	///Getters y Setters
 	public int getNum_semana() {
 		return num_semana;
 	}
-
 	public void setNum_semana(int num_semana) {
 		this.num_semana = num_semana;
 	}
@@ -65,7 +67,6 @@ public class Contrato {
 	public int getCant_horas_contrato() {
 		return cant_horas_contrato;
 	}
-
 	public void setCant_horas_contrato(int cant_horas_contrato) {
 		this.cant_horas_contrato = cant_horas_contrato;
 	}
@@ -73,7 +74,6 @@ public class Contrato {
 	public double getSalario() {
 		return salario;
 	}
-
 	public void setSalario(double salario) {
 		this.salario = salario;
 	}
@@ -81,7 +81,6 @@ public class Contrato {
 	public boolean isFinde_libre() {
 		return finde_libre;
 	}
-
 	public void setFinde_libre(boolean finde_libre) {
 		this.finde_libre = finde_libre;
 	}
