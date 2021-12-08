@@ -1,19 +1,19 @@
 package Aplicacion_de_Gestion;
-import java.util.Date;
+
 import java.util.ArrayList;
 
 public class Empleado {
 	private int cod_empleado;
 	private boolean estado_empleado;
 	private String dni, nombre, apellido, telefono;
-	private Date fecha_nacimiento;
+	private String fecha_nacimiento;
 	private String num_cuenta, banco_cuenta;
 	
 	private Historial_Empleado historial_empleado;
 	private ArrayList<Historial_Cambios> historia_cambios_empleado; 
 	private ArrayList<Contrato> contratos; 
 	
-	public Empleado(String dni, String nombre, String apellido, String telefono, Date fecha_nacimiento, String num_cuenta, String banco_cuenta ) {
+	public Empleado(String dni, String nombre, String apellido, String telefono, String fecha_nacimiento, String num_cuenta, String banco_cuenta) {
 		this.dni = dni;
 		this.nombre = nombre;
 		this.apellido = apellido;
