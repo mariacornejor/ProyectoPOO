@@ -1,11 +1,12 @@
 package Aplicacion_de_Gestion;
 
-public class Turno extends Contrato {
+public class Turno {
 	private int dia;
 	private tipo_turno horario;
 	
-	public Turno() {
-		// TODO Auto-generated constructor stub
+	public Turno(int dia, tipo_turno horario) {
+		this.dia = dia;
+		this.horario = horario;
 	}
 
 	public int getDia() {
