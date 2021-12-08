@@ -25,19 +25,43 @@ public class Gestion_Empleado {
 		ArrayList<Historial_Cambios> Historial_Cambios_Empresa = new ArrayList<Historial_Cambios>();
 	}
 
-	public boolean AgregarEmpleado(Empleado empleado) {
+	public void AgregarEmpleado(Empleado empleado) {
 		empleado.setCod_empleado(this.codigos_empleado);
 		this.codigos_empleado++;
 		empleado.setEstado_empleado(true);
 		empleado.setPuesto("Empleado");
-		
-		
-		
-		
-
+		this.empleados.add(empleado);
 	}
 
 	public boolean Despedir_Empleado(Empleado Empleado_IN, Empleado Empleado_OUT) {
+		Empleado e =null;
+		for(Empleado ee: this.empleados)
+		{
+			if(ee.getCod_empleado() == Empleado_OUT.getCod_empleado())
+			{
+				e = ee;
+				this.empleados.remove(e);
+				break;
+			}
+		}
+		if(e==null)
+			return false;
+		
+		///Transfiero TODOS los contratos Proximos al otro empleado
+		for(Contrato c : e.getContratos())
+		{
+			///TODO VALIDAR ULTIMA ENTREGAR usando Date
+			if(c.num_semana > this.semana_actual)
+			{
+				Empleado_IN.getContratos().add(c);
+			}
+		}
+		for(Contrato c : Empleado_IN.getContratos())
+		{
+			e.getContratos().remove(c);
+		}
+		e.setEstado_empleado(false); ///Despedido para que no se le asignen contratos 
+		this.empleados.add(e); ///Agrego el empleado despedido, asi mantengo los datos de la semanas anteriores
 
 	}
 
@@ -50,10 +74,26 @@ public class Gestion_Empleado {
 	}
 
 	public void AgregarComentHistorial(String comentario, boolean estado) {
-
+		this.Historial_Cambios_Empresa.add(new Historial_Cambios(comentario, comentario));
 	}
 
 	public ArrayList<Calendario> Generar_Calendario(int semana) {
+		///TODO recopila datos 
+		this.calendario_Semana_Activa =  new ArrayList<Calendario>();
+		for(Empleado e: this.empleados)
+		{
+			for(Contrato c : e.getContratos())
+			{
+				if(c.getNum_semana() == semana)
+				{
+					for(Turno t: c.getTurnos())
+					{
+						Calendario cal =  new Calendario(e.getCod_empleado(), semana, t);
+						this.calendario_Semana_Activa.add(cal);
+					}
+				}
+			}
+		}
 
 	}
 
