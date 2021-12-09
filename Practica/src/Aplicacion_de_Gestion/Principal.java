@@ -23,9 +23,13 @@ public class Principal {
 		Empresa.getEmpleados().add(emp4);
 		Empresa.getEmpleados().add(emp5);
 		
-		Empresa.Generar_Proximo_Contratos(40);
-		Empresa.Generar_Calendario(40);
+		Empresa.Generador_Contratos_Algoritmo(40);
+		Empresa.Generar_Calendario_ArrayList(40);
 		Empresa.Imprimir_Calendario_Semanal();
+		
+		
+		
+		
 	}
 
 }

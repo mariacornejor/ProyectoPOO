@@ -10,26 +10,23 @@ public class Contrato {
 	protected double salario;
 	protected boolean finde_libre;
 	protected ArrayList<Turno> turnos;
-	
+
 	public Contrato(int num_semana,int cant_horas_contrato,double salario) {
 		this.num_semana =num_semana ;
 		this.cant_horas_contrato =cant_horas_contrato ;
 		this.salario =salario ;
 		this.turnos =  new ArrayList<Turno>();
 	}
-	
-	private boolean Validar_Turnos(ArrayList<Turno> Turno) {
-		///TODO Validar dias consecutivos y no menos de 24 horas entre turnos
-		if(turnos.size()*8 != cant_horas_contrato) {
-			return false;
-		}
-		
+
+	public boolean Validar_Turnos_Consecutivos_24h() {
+		///Validar dias consecutivos y no menos de 24 horas entre turnos
+
 		turnos.sort(new CriterioTurnosDia());
 		for(int i=0; i<this.turnos.size()-1 ;i++) {
 			if(this.turnos.get(i).getDia()+1 != this.turnos.get(i+1).getDia()) { //dia consecutivo
 				return false;
 			}
-			
+
 			int turno1 = this.turnos.get(i).getDia()*3 + this.turnos.get(i).getHorario().ordinal();
 			int turno2 = this.turnos.get(i).getDia()*3 + this.turnos.get(i).getHorario().ordinal();
 			if(Math.abs((turno2-turno1)) < 3) { //no menos de 24h
@@ -39,10 +36,22 @@ public class Contrato {
 		return true;
 	}
 	
-	public boolean Hacer_Cambio(Turno Turno_IN, Turno Turno_OUT) {
+	public boolean VerificarValidezContrato()
+	{
+		if(Validar_Turnos_Consecutivos_24h())
+			if(turnos.size()*8 == cant_horas_contrato) 
+				return true;
+		return false;
+	}
+
+	public boolean Hacer_Cambio_Turno(Turno Turno_IN, Turno Turno_OUT) {
+		
+		if(!this.turnos.contains(Turno_OUT))
+			return false;
+		
 		this.turnos.remove(Turno_OUT);
 		this.turnos.add(Turno_IN);
-		if(Validar_Turnos(this.turnos))
+		if(Validar_Turnos_Consecutivos_24h())
 		{
 			///Es un cambio valido
 			return true;
@@ -84,7 +93,7 @@ public class Contrato {
 	public void setFinde_libre(boolean finde_libre) {
 		this.finde_libre = finde_libre;
 	}
-	
+
 	public ArrayList<Turno> getTurnos() {
 		return turnos;
 	}

@@ -10,7 +10,7 @@ public class Empleado {
 	private String num_cuenta, banco_cuenta;
 	
 	private Historial_Empleado historial_empleado;
-	private ArrayList<Historial_Cambios> historia_cambios_empleado; 
+	private ArrayList<Historial_Cambios> historial_cambios_empleado; 
 	private ArrayList<Contrato> contratos; 
 	
 	public Empleado(String dni, String nombre, String apellido, String telefono, String fecha_nacimiento, String num_cuenta, String banco_cuenta) {
@@ -22,24 +22,81 @@ public class Empleado {
 		this.banco_cuenta = banco_cuenta;
 		this.num_cuenta = num_cuenta;
 		
-		ArrayList<Historial_Cambios> historia_cambios_empleado = new ArrayList<Historial_Cambios>(); 
-		ArrayList<Contrato> contratos = new ArrayList<Contrato>();
+		this.historial_empleado =  new Historial_Empleado();
+		this.historial_cambios_empleado = new ArrayList<Historial_Cambios>(); 
+		this.contratos = new ArrayList<Contrato>();
 	}
 	
-	public Boolean CambioContrato(Contrato nuevo_contrato, int num_semana) {
-		
+	public void CambioContrato(Contrato nuevo_contrato) {
+		Contrato cSobreescribir = null;
+		for(Contrato c: this.contratos)
+		{
+			if(c.getNum_semana() == nuevo_contrato.getNum_semana())
+			{
+				cSobreescribir = c;
+				break;
+			}
+		}
+		if(cSobreescribir != null)
+		{
+			cSobreescribir.getTurnos().clear();
+			this.contratos.remove(cSobreescribir);
+		}
+		this.contratos.add(nuevo_contrato);
+	}
+	///Se usara en el algoritmos de generar turnos
+	public boolean CambioTurno(Turno turno_eliminar, Turno turno_agregar, int num_semana) {
+		///TODO 
+		Contrato cModificar = null;
+		for(Contrato c: this.contratos)
+		{
+			if(c.getNum_semana() == num_semana)
+			{
+				cModificar = c;
+				break;
+			}
+		}
+		if(cModificar==null)
+			return false; ///TODO ALERT
+		///TODO estoy mas dormido que despierto, a dormir
+		if(cModificar.Hacer_Cambio_Turno(turno_agregar, turno_eliminar))
+		{
+			return true;
+		}
+		return true;
 	}
 	
-	public boolean CambioHorario(Turno turno_eliminar, Turno turno_agregar, int num_semana) {
-		
+	public void AgregarComentarioHistorial(String comentario, boolean estado) {
+		String status = "Denegado";
+		if(estado)
+			status = "Aceptado";
+		this.historial_cambios_empleado.add(new Historial_Cambios(comentario, status));
 	}
 	
-	public void AgregarComentHisorial(String comentario, boolean estado) {
-		
-	}
-	
-	public boolean Mover_Contrato_al_Historial(int num_semana) {
-		
+	public void Mover_Contrato_al_Historial(int num_semana) {
+		for(Contrato c: this.getContratos())
+		{
+			if(c.getNum_semana() == num_semana)
+			{
+				if(c instanceof Contrato_24h)
+					this.historial_empleado.setCant_contrato_24h( this.historial_empleado.getCant_contrato_24h() + 1 );
+				else if( c instanceof Contrato_32h)
+					this.historial_empleado.setCant_contrato_32h( this.historial_empleado.getCant_contrato_32h() + 1 );
+				else if( c instanceof Contrato_40h)
+					this.historial_empleado.setCant_contrato_40h( this.historial_empleado.getCant_contrato_40h() + 1 );
+				else if( c instanceof Contrato_Vacaciones)
+				{
+					this.historial_empleado.setCant_dias_vacaciones( this.historial_empleado.getCant_dias_vacaciones() + 7); //7 dias
+					this.historial_empleado.setCant_contrato_vacaciones( this.historial_empleado.getCant_contrato_vacaciones() + 1);
+				}
+				
+				if(c.finde_libre)
+					this.historial_empleado.setCant_dias_vacaciones( this.historial_empleado.getCant_dias_vacaciones() + 1);// 2  dias que cuentan como vacaciones
+				
+				this.AgregarComentarioHistorial("Contrato de "+c.cant_horas_contrato+"h - concluido", true);
+				return;
+			}
+		}
 	}
 	
 	
@@ -95,21 +152,14 @@ public class Empleado {
 		this.telefono = telefono;
 	}
 
-	public Date getFecha_nacimiento() {
+	public String getFecha_nacimiento() {
 		return fecha_nacimiento;
 	}
 
-	public void setFecha_nacimiento(Date fecha_nacimiento) {
+	public void setFecha_nacimiento(String fecha_nacimiento) {
 		this.fecha_nacimiento = fecha_nacimiento;
 	}
 
-	public String getPuesto() {
-		return puesto;
-	}
-
-	public void setPuesto(String puesto) {
-		this.puesto = puesto;
-	}
 
 	public String getNum_cuenta() {
 		return num_cuenta;
@@ -135,12 +185,12 @@ public class Empleado {
 		this.historial_empleado = historial_empleado;
 	}
 
-	public ArrayList<Historial_Cambios> getHistoria_cambios_empleado() {
-		return historia_cambios_empleado;
+	public ArrayList<Historial_Cambios> getHistorial_cambios_empleado() {
+		return historial_cambios_empleado;
 	}
 
-	public void setHistoria_cambios_empleado(ArrayList<Historial_Cambios> historia_cambios_empleado) {
-		this.historia_cambios_empleado = historia_cambios_empleado;
+	public void setHistorial_cambios_empleado(ArrayList<Historial_Cambios> historial_cambios_empleado) {
+		this.historial_cambios_empleado = historial_cambios_empleado;
 	}
 
 	public ArrayList<Contrato> getContratos() {
