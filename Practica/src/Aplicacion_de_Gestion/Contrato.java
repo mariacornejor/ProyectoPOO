@@ -16,25 +16,86 @@ public class Contrato {
 		this.cant_horas_contrato =cant_horas_contrato ;
 		this.salario =salario ;
 		this.turnos =  new ArrayList<Turno>();
+		
 	}
+		
+	
+	public Contrato(Contrato c)
+	{
+		this.num_semana = c.num_semana;
+		this.cant_horas_contrato = c.cant_horas_contrato;
+		this.salario = c.salario;
+
+		this.turnos =  new ArrayList<Turno>();
+		for(Turno t : c.turnos)
+			this.turnos.add(new Turno(t.getDia(),t.getHorario()));	
+		
+	}
+
 
 	public boolean Validar_Turnos_Consecutivos_24h() {
 		///Validar dias consecutivos y no menos de 24 horas entre turnos
-
+//TODO
+		if(this.turnos.size()==1)
+			return true;
+		
+		
+		
 		turnos.sort(new CriterioTurnosDia());
+		
 		for(int i=0; i<this.turnos.size()-1 ;i++) {
-			if(this.turnos.get(i).getDia()+1 != this.turnos.get(i+1).getDia()) { //dia consecutivo
+			///Dias consecutivos de trabajo
+			if((this.turnos.get(i).getDia()+1) != this.turnos.get(i+1).getDia()) { //dia consecutivo
 				return false;
 			}
-
+			//24 horas minimas
 			int turno1 = this.turnos.get(i).getDia()*3 + this.turnos.get(i).getHorario().ordinal();
-			int turno2 = this.turnos.get(i).getDia()*3 + this.turnos.get(i).getHorario().ordinal();
+			int turno2 = this.turnos.get(i+1).getDia()*3 + this.turnos.get(i+1).getHorario().ordinal();
 			if(Math.abs((turno2-turno1)) < 3) { //no menos de 24h
 				return false;
 			}
 		}
+		
 		return true;
+		
+		//TODO Borrar si no se usa al final
+		/* 
+		
+		///validar dias consecutivos
+		if(this.turnos.get(0).getDia() == 0 && (this.turnos.get(this.turnos.size()-1).getDia()+1)%7 == 0)
+		{	///Ultimo dia y primeo de la semana, son consecutivos
+			///pos del primero despues del break!?
+			///Dias consecutivos de vacaciones!!!
+			
+			for(Turno t : this.turnos )
+			{
+				
+			}
+			
+			
+			
+		}
+		else ///Dias consecutivos solo entre semana
+		{
+			
+			for(int i=0; i<this.turnos.size()-1 ;i++) {
+				///Dias consecutivos de trabajo
+				if((this.turnos.get(i).getDia()+1)%7 != this.turnos.get(i+1).getDia()%7) { //dia consecutivo
+					return false;
+				}
+				//24 horas minimas
+				int turno1 = this.turnos.get(i).getDia()*3 + this.turnos.get(i).getHorario().ordinal();
+				int turno2 = this.turnos.get(i+1).getDia()*3 + this.turnos.get(i+1).getHorario().ordinal();
+				if(Math.abs((turno2-turno1)) < 3) { //no menos de 24h
+					return false;
+				}
+			}
+		}
+		
+		return true;
+		*/
 	}
+	
 	
 	public boolean VerificarValidezContrato()
 	{

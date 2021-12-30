@@ -8,8 +8,8 @@ public class CriterioCalendario implements Comparator< Calendario> {
 
 	@Override
 	public int compare(Calendario c1, Calendario c2) {
-		int valorC1 = c1.getTurno().getDia()*3 + c1.getTurno().getHorario().ordinal();
-		int valorC2 = c2.getTurno().getDia()*3 + c2.getTurno().getHorario().ordinal();
+		int valorC1 = c1.getTurno().getDia() + c1.getTurno().getHorario().ordinal()*7;
+		int valorC2 = c2.getTurno().getDia() + c2.getTurno().getHorario().ordinal()*7;
 		
 		
 		if(valorC1 == valorC2)

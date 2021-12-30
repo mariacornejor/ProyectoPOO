@@ -1,6 +1,8 @@
 package Aplicacion_de_Gestion;
 import java.util.ArrayList;
 
+import Comparadores.CriterioCalendario;
+
 public class Gestion_Empleado {
 	
 	///TODO: Hacer un Singleton de estos datos
@@ -14,6 +16,9 @@ public class Gestion_Empleado {
 	private  ArrayList<Empleado> empleados; 
 	private ArrayList<Calendario> calendario_Semana_Activa; 
 	private ArrayList<Historial_Cambios> Historial_Cambios_Empresa;
+	
+
+	private ArrayList<ArrayList<Contrato>> lContratosSemanales; ///Backtrackin uses
 
 	public Gestion_Empleado(int semana_actual, String nom_empresa, String direccion, String telefono) {
 		this.semana_actual = semana_actual;
@@ -138,8 +143,6 @@ public class Gestion_Empleado {
 			e2.AgregarComentarioHistorial("Cambio de turno", false);
 			return false;
 		}
-			
-
 	}
 
 	public boolean Cambio_Contrato_Empleados(int num_semana, int cod_empleado1, int cod_empleado2) {
@@ -238,14 +241,51 @@ public class Gestion_Empleado {
 
 	}
 
+
+	private void Generar_Calendario_Semana(ArrayList<Contrato> lContratos )
+	{
+		
+			this.calendario_Semana_Activa =  new ArrayList<Calendario>();
+			int contractNumber = -1;
+			for(Contrato con: lContratos)
+			{
+				contractNumber++;
+				for(Turno t : con.getTurnos())
+				{
+					Calendario cal = new Calendario(contractNumber, 40, t);
+					this.calendario_Semana_Activa.add(cal);
+				}
+			}
+			//Imprimir_Calendario_Semanal();
+		
+	}
+
 	public void Imprimir_Calendario_Semanal() {
 		//Ordeno
 		this.calendario_Semana_Activa.sort(new Comparadores.CriterioCalendario());
 		//Imprimo
+		String datos [][] = new String[3][7];
+		for(int i=0; i<7;i++)
+			for(int j=0;j<3;j++)
+				datos[j][i] = "-";
+		
+		int dia=0;
+		int horario;
 		for(Calendario c: this.calendario_Semana_Activa)
 		{
-			System.out.print("Semana: "+c.getN_semana() +" \t-"+c.getTurno().getHorario().name() + " \t "+c.getCod_empleado());
+			dia = c.getTurno().getDia();
+			horario = c.getTurno().getHorario().ordinal();
+			datos[horario][dia] = String.valueOf(c.getCod_empleado());
 		}
+		for(int i=0; i<3;i++)
+		{
+			for(int j=0;j<7;j++)
+			{
+				System.out.print(" \t "+datos[i][j]);	
+			}
+			System.out.println();
+		}
+		System.out.println("\n-------------------------------------------------------------");
 	}
 
 	public void CerrarSemana() {
@@ -257,11 +297,139 @@ public class Gestion_Empleado {
 
 	}
 
-	public ArrayList<Calendario> Generador_Contratos_Algoritmo(int num_semana) {
+
+	public ArrayList<Calendario> Generador_Contratos_Algoritmo() {
 		///TODO Hacer algoritmo recursivo principal
+		
+		lContratosSemanales = new ArrayList<ArrayList<Contrato>>();
+		
+		System.out.println("EMPIEZA -------------------");
+		Buscar_Posibles_Contratos(new ArrayList<Contrato>());
+		System.out.println("TERMINA -------------------");
+		///TODO Serializar resultados!!!
+		
+		for(ArrayList<Contrato> contratosSemana: lContratosSemanales)
+		{
+			Generar_Calendario_Semana(contratosSemana);
+			Imprimir_Calendario_Semanal();
+		}
+		
 		return this.calendario_Semana_Activa;
 
 	}
+	
+	private Boolean Buscar_Posibles_Turnos(ArrayList<Contrato> contratosSemana, int dia,Boolean encontrado)
+	{
+		if(encontrado)
+			return encontrado;
+		
+		if(dia==21) ///Sol encontrada
+		{
+			
+			///Si llego aquí, es solución
+
+			ArrayList<Contrato> solEncontrada = new ArrayList<Contrato>();
+			contratosSemana.forEach(c -> solEncontrada.add(c));
+			
+			this.lContratosSemanales.add(solEncontrada);
+			
+			Generar_Calendario_Semana(solEncontrada);
+			Imprimir_Calendario_Semanal();
+			
+			System.out.println("Solucion TURNOS " + contratosSemana.size());
+
+			
+			return true;
+		}
+			
+		for(int c = 0 ; c<contratosSemana.size() && encontrado ==false ; c++)
+		{
+			
+			if(contratosSemana.get(c).getTurnos().size()*8 < contratosSemana.get(c).cant_horas_contrato)
+			{
+				tipo_turno tipoturno = tipo_turno.morning; //por defecto, aunque siempre es sobreescrito
+				switch(dia/7)
+				{
+				case 0: tipoturno = tipo_turno.morning; 
+					break;
+				case 1: tipoturno = tipo_turno.afternoon; 
+					break;
+				case 2: tipoturno = tipo_turno.night; 
+					break;
+				}
+				
+				Turno turnoTemp = new Turno(dia%7, tipoturno);
+				contratosSemana.get(c).getTurnos().add(turnoTemp);
+				
+				if(contratosSemana.get(c).Validar_Turnos_Consecutivos_24h())
+				{
+					//Generar_Calendario_Semana(contratosSemana);
+					//Imprimir_Calendario_Semanal();
+					encontrado = Buscar_Posibles_Turnos(contratosSemana, dia+1,encontrado);
+					
+				}
+				
+				contratosSemana.get(c).getTurnos().remove(turnoTemp);
+			}
+				
+			
+		}
+		return encontrado;
+		
+	}
+		
+		
+			
+	private void Buscar_Posibles_Contratos(ArrayList<Contrato> contratosSemana)
+	{
+		if(contratosSemana.size() >=7)
+			return;
+		
+		int horas = 0;
+
+		for(int k=0;k<contratosSemana.size();k++)
+			horas += contratosSemana.get(k).cant_horas_contrato;
+		
+		
+		if(horas == 168 )//Llego a una solucion
+		{
+			System.out.print("Sol Semana " + contratosSemana.size()+ " --  ");
+			contratosSemana.forEach(c -> System.out.print(c.cant_horas_contrato+" "));
+			System.out.println();
+			Buscar_Posibles_Turnos(contratosSemana,0,false);
+			return;
+		}
+		
+		///Busco los posibles contratos validos
+		for(int i=0;i<3;i++) 
+		{
+			int horasExtra=0;
+			switch (i) 
+			{
+			case 0:
+				contratosSemana.add(new Contrato_24h(40));
+				horasExtra=24;
+				break;
+			case 1:
+				contratosSemana.add(new Contrato_32h(40));
+				horasExtra=32;
+				break;
+			case 2:
+				contratosSemana.add(new Contrato_40h(40));
+				horasExtra=40;
+				break;
+			}
+			
+			horas += horasExtra;
+			if(horas <= 168 ) ///ALCANZABLE
+				Buscar_Posibles_Contratos(contratosSemana);
+				
+			horas -= horasExtra;
+			contratosSemana.remove(contratosSemana.size()-1);
+		}
+		
+	}
+
 
 
 	///GETTERS Y SETTERS
