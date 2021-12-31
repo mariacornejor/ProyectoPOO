@@ -5,9 +5,10 @@
 package Aplicacion_de_Gestion;
 
 public class Principal {
-
-    public static void main (String[] args) {
-	Gestion_Empleado Empresa = new Gestion_Empleado(40,"RisBel","Avenida el Sol","678456321");
+    public static Gestion_Empleado Empresa;
+    
+    public Principal() {
+        Empresa = new Gestion_Empleado(40,"RisBel","Avenida el Sol","678456321");
 
         Empleado emp1 = new Empleado("17463971A", "Alma", "Swift", "674821998", "06-06-1990", "ES 12 1756 1866 15 2834510863", "Santander");
         Empleado emp2 = new Empleado("22748614D", "Jorge", "Gomez", "647262553", "2000-12-25", "ES 12 5636 1993 12 3023713562", "BBVA");
@@ -20,16 +21,56 @@ public class Principal {
 	emp3.getContratos().add(new Contrato_40h(40, 1800));  
 	emp4.getContratos().add(new Contrato_24h(40, 900)); 
 	emp5.getContratos().add(new Contrato_24h(40, 900)); 
-		
-	Empresa.getEmpleados().add(emp1);
-	Empresa.getEmpleados().add(emp2);
-	Empresa.getEmpleados().add(emp3);
-	Empresa.getEmpleados().add(emp4);
-	Empresa.getEmpleados().add(emp5);
-		
+	
+        for (int i=15; i<20; i++) {
+            emp1.AgregarComentarioHistorial("cambió turno "+(Math.random()*100), (((int)(Math.random()*100))%2==0));
+            emp2.AgregarComentarioHistorial("cambió turno "+(Math.random()*100), (((int)(Math.random()*100))%2==0));
+            emp3.AgregarComentarioHistorial("cambió turno "+(Math.random()*100), (((int)(Math.random()*100))%2==0));
+            emp4.AgregarComentarioHistorial("cambió turno "+(Math.random()*100), (((int)(Math.random()*100))%2==0));
+            emp5.AgregarComentarioHistorial("cambió turno "+(Math.random()*100), (((int)(Math.random()*100))%2==0));
+        }
+        
+        emp1.getHistorial_empleado().setCant_contrato_vacaciones(1);
+        emp1.getHistorial_empleado().setCant_contrato_24h(5);
+        emp1.getHistorial_empleado().setCant_contrato_32h(7);
+        emp1.getHistorial_empleado().setCant_contrato_40h(2);
+        emp1.getHistorial_empleado().setCant_dias_vacaciones(8);
+        
+        emp2.getHistorial_empleado().setCant_contrato_vacaciones(4);
+        emp2.getHistorial_empleado().setCant_contrato_24h(12);
+        emp2.getHistorial_empleado().setCant_contrato_32h(3);
+        emp2.getHistorial_empleado().setCant_contrato_40h(2);
+        emp2.getHistorial_empleado().setCant_dias_vacaciones(13);
+        
+        emp3.getHistorial_empleado().setCant_contrato_vacaciones(4);
+        emp3.getHistorial_empleado().setCant_contrato_24h(9);
+        emp3.getHistorial_empleado().setCant_contrato_32h(0);
+        emp3.getHistorial_empleado().setCant_contrato_40h(22);
+        emp3.getHistorial_empleado().setCant_dias_vacaciones(31);
+        
+        emp4.getHistorial_empleado().setCant_contrato_vacaciones(5);
+        emp4.getHistorial_empleado().setCant_contrato_24h(7);
+        emp4.getHistorial_empleado().setCant_contrato_32h(8);
+        emp4.getHistorial_empleado().setCant_contrato_40h(15);
+        emp4.getHistorial_empleado().setCant_dias_vacaciones(21);
+        
+        emp5.getHistorial_empleado().setCant_contrato_vacaciones(6);
+        emp5.getHistorial_empleado().setCant_contrato_24h(3);
+        emp5.getHistorial_empleado().setCant_contrato_32h(12);
+        emp5.getHistorial_empleado().setCant_contrato_40h(7);
+        emp5.getHistorial_empleado().setCant_dias_vacaciones(13);
+        
+        Empresa.AgregarEmpleado(emp1);
+        Empresa.AgregarEmpleado(emp2);
+        Empresa.AgregarEmpleado(emp3);
+        Empresa.AgregarEmpleado(emp4);
+        Empresa.AgregarEmpleado(emp5);
+    }
+    
+    public static void main (String[] args) {
 	Empresa.Generador_Contratos_Algoritmo(40);
 	Empresa.Generar_Calendario_ArrayList(40);
 	Empresa.Imprimir_Calendario_Semanal();	
     }
-
+    
 }
