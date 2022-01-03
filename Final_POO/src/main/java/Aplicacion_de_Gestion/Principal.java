@@ -16,11 +16,11 @@ public class Principal {
 	Empleado emp4 = new Empleado("12201438M", "Santiago", "Ross", "624157606", "1998-01-16", "ES 19 1195 1866 19 1053086952", "LiberBank");
 	Empleado emp5 = new Empleado("73793113S", "Lana", "Fuentes", "692613093", "1997-11-04", "ES 11 1756 4622 11 5208503966", "BBVA");
 		
-	emp1.getContratos().add(new Contrato_40h(40, 1800));  
-	emp2.getContratos().add(new Contrato_40h(40, 1800));  
-	emp3.getContratos().add(new Contrato_40h(40, 1800));  
-	emp4.getContratos().add(new Contrato_24h(40, 900)); 
-	emp5.getContratos().add(new Contrato_24h(40, 900)); 
+	emp1.getContratos().add(new Contrato_40h(40));  
+	emp2.getContratos().add(new Contrato_40h(40));  
+	emp3.getContratos().add(new Contrato_40h(40));  
+	emp4.getContratos().add(new Contrato_24h(40)); 
+	emp5.getContratos().add(new Contrato_24h(40)); 
 	
         for (int i=15; i<20; i++) {
             emp1.AgregarComentarioHistorial("cambió turno "+(Math.random()*100), (((int)(Math.random()*100))%2==0));
@@ -68,7 +68,7 @@ public class Principal {
     }
     
     public static void main (String[] args) {
-	Empresa.Generador_Contratos_Algoritmo(40);
+	Empresa.Generador_Contratos_Algoritmo();
 	Empresa.Generar_Calendario_ArrayList(40);
 	Empresa.Imprimir_Calendario_Semanal();	
     }
