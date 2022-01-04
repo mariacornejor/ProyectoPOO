@@ -12,6 +12,11 @@ public class Turno {
 	this.dia = dia;
 	this.horario = horario;
     }
+    
+    public Turno(Turno t) {
+	this.dia = t.dia;
+	this.horario = t.horario;
+    }
 
     public int getDia() {
 	return dia;

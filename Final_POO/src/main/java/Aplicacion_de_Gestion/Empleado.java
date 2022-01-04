@@ -14,20 +14,23 @@ public class Empleado {
 	private ArrayList<Contrato> contratos; 
 	
 	public Empleado(String dni, String nombre, String apellido, String telefono, String fecha_nacimiento, String num_cuenta, String banco_cuenta) {
-		this.dni = dni;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.telefono = telefono;
-		this.fecha_nacimiento = fecha_nacimiento;
-		this.banco_cuenta = banco_cuenta;
-		this.num_cuenta = num_cuenta;
-		
-		this.historial_empleado =  new Historial_Empleado();
-		this.historial_cambios_empleado = new ArrayList<Historial_Cambios>(); 
-		this.contratos = new ArrayList<Contrato>();
+            this.estado_empleado = true;
+            this.dni = dni;
+            this.nombre = nombre;
+            this.apellido = apellido;
+            this.telefono = telefono;
+            this.fecha_nacimiento = fecha_nacimiento;
+            this.banco_cuenta = banco_cuenta;
+            this.num_cuenta = num_cuenta;
+
+            this.historial_empleado =  new Historial_Empleado();
+            this.historial_cambios_empleado = new ArrayList<Historial_Cambios>(); 
+            this.contratos = new ArrayList<Contrato>();
+            
+            this.AgregarComentarioHistorial("Alta Empleado - Contratado", true);
 	}
 	
-	public void CambioContrato(Contrato nuevo_contrato) {
+	public void Agregar_o_Cambio_Contrato(Contrato nuevo_contrato) {
 		Contrato cSobreescribir = null;
 		for(Contrato c: this.contratos)
 		{
@@ -74,29 +77,41 @@ public class Empleado {
 	}
 	
 	public void Mover_Contrato_al_Historial(int num_semana) {
-		for(Contrato c: this.getContratos())
-		{
-			if(c.getNum_semana() == num_semana)
-			{
-				if(c instanceof Contrato_24h)
-					this.historial_empleado.setCant_contrato_24h( this.historial_empleado.getCant_contrato_24h() + 1 );
-				else if( c instanceof Contrato_32h)
-					this.historial_empleado.setCant_contrato_32h( this.historial_empleado.getCant_contrato_32h() + 1 );
-				else if( c instanceof Contrato_40h)
-					this.historial_empleado.setCant_contrato_40h( this.historial_empleado.getCant_contrato_40h() + 1 );
-				else if( c instanceof Contrato_Vacaciones)
-				{
-					this.historial_empleado.setCant_dias_vacaciones( this.historial_empleado.getCant_dias_vacaciones() + 7); //7 dias
-					this.historial_empleado.setCant_contrato_vacaciones( this.historial_empleado.getCant_contrato_vacaciones() + 1);
-				}
-				
-				if(c.finde_libre)
-					this.historial_empleado.setCant_dias_vacaciones( this.historial_empleado.getCant_dias_vacaciones() + 1);// 2  dias que cuentan como vacaciones
-				
-				this.AgregarComentarioHistorial("Contrato de "+c.cant_horas_contrato+"h - concluido", true);
-				return;
-			}
-		}
+            Contrato c = this.getContrato(num_semana);
+            if(c == null )
+                return;
+            
+            if(c.getNum_semana() == num_semana)
+            {
+                    if(c instanceof Contrato_24h)
+                            this.historial_empleado.setCant_contrato_24h( this.historial_empleado.getCant_contrato_24h() + 1 );
+                    else if( c instanceof Contrato_32h)
+                            this.historial_empleado.setCant_contrato_32h( this.historial_empleado.getCant_contrato_32h() + 1 );
+                    else if( c instanceof Contrato_40h)
+                            this.historial_empleado.setCant_contrato_40h( this.historial_empleado.getCant_contrato_40h() + 1 );
+                    else if( c instanceof Contrato_Vacaciones)
+                    {
+                            this.historial_empleado.setCant_contrato_vacaciones( this.historial_empleado.getCant_contrato_vacaciones() + 1);
+                    }
+                    
+                    boolean sabadoLibre =true;
+                    boolean domingoLibre = true;
+                    
+                    for(Turno t: c.getTurnos())
+                    {
+                        if(t.getDia() == 5) //Sabado
+                            sabadoLibre = false;
+                        if(t.getDia() == 6) //Domingo libre
+                            domingoLibre = false;
+                    }
+                    if(sabadoLibre && domingoLibre)
+                        c.setFinde_libre(true);
+                    else
+                        c.setFinde_libre(false);
+                            
+
+                    this.AgregarComentarioHistorial("Contrato de "+c.cant_horas_contrato+"h - concluido - semana "+num_semana, true);
+            }
 	}
 	
 	
@@ -110,6 +125,15 @@ public class Empleado {
 	
 	///GETTERS Y SETTERS	
 
+        
+        public boolean getestado_empleado() {
+		return estado_empleado;
+	}
+
+	public void  setestado_empleado(boolean estado_empleado) {
+		this.estado_empleado = estado_empleado;
+	}
+        
 	public int getCod_empleado() {
 		return cod_empleado;
 	}
@@ -134,6 +158,10 @@ public class Empleado {
 		this.dni = dni;
 	}
 
+        public String getNombreCompleto()
+        {
+            return String.format("%s %s", this.nombre, this.apellido);
+        }
 	public String getNombre() {
 		return nombre;
 	}
