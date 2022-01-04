@@ -4,6 +4,8 @@
  */
 package Aplicacion_de_Gestion;
 
+import java.util.HashMap;
+
 public class Principal {
     
     public Principal() {
@@ -57,12 +59,30 @@ public class Principal {
         emp6.getHistorial_empleado().setCant_contrato_32h(7);
         emp6.getHistorial_empleado().setCant_contrato_40h(2);
         
+        
+        
+        
         Gestion_Empresa.getInstance().AgregarEmpleado(emp1);
         Gestion_Empresa.getInstance().AgregarEmpleado(emp2);
         Gestion_Empresa.getInstance().AgregarEmpleado(emp3);
         Gestion_Empresa.getInstance().AgregarEmpleado(emp4);
         Gestion_Empresa.getInstance().AgregarEmpleado(emp5);
         Gestion_Empresa.getInstance().AgregarEmpleado(emp6);
+        
+        HashMap<Integer, Integer> NumContrato_Codigoempleados = new HashMap<>();
+        int ContractNumber = 0;
+        for(Empleado e: Gestion_Empresa.getInstance().getEmpleados())
+        {
+            NumContrato_Codigoempleados.put(ContractNumber, e.getCod_empleado());
+            ContractNumber++;
+        }
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,1,0);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,2,1);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,3,1);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,4,0);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,5,0);
+
+        
 
     }
     

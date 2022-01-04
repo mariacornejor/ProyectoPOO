@@ -389,19 +389,19 @@ public class Gestion_Empresa {
 	private void Generar_Calendario_Semana(ArrayList<Contrato> lContratos )
 	{
 		
-			this.calendario_Semana_Activa =  new ArrayList<Calendario>();
-			int contractNumber = -1;
-			for(Contrato con: lContratos)
-			{
-				contractNumber++;
-				for(Turno t : con.getTurnos())
-				{
-					Calendario cal = new Calendario(contractNumber, 40, t);
-					this.calendario_Semana_Activa.add(cal);
-				}
-			}
-			Imprimir_Calendario_Semanal();
-		
+            this.calendario_Semana_Activa =  new ArrayList<Calendario>();
+            int contractNumber = -1;
+            for(Contrato con: lContratos)
+            {
+                    contractNumber++;
+                    for(Turno t : con.getTurnos())
+                    {
+                            Calendario cal = new Calendario(contractNumber, 40, t);
+                            this.calendario_Semana_Activa.add(cal);
+                    }
+            }
+            Imprimir_Calendario_Semanal();
+
 	}
 
 	public void Imprimir_Calendario_Semanal() {
