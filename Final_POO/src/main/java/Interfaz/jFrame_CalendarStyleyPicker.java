@@ -95,8 +95,16 @@ public class jFrame_CalendarStyleyPicker extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(39, 40, 61));
 
+        jRadioButton1.setBackground(new java.awt.Color(79, 92, 106));
         buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
+        jRadioButton1.setForeground(new java.awt.Color(229, 229, 229));
         jRadioButton1.setText("6 empleados");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
 
         jTable_calendarios0.setBackground(new java.awt.Color(223, 223, 223));
         jTable_calendarios0.setModel(new javax.swing.table.DefaultTableModel(
@@ -122,7 +130,10 @@ public class jFrame_CalendarStyleyPicker extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable_calendarios0);
         jTable_calendarios0.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
+        jRadioButton2.setBackground(new java.awt.Color(79, 92, 106));
         buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
+        jRadioButton2.setForeground(new java.awt.Color(229, 229, 229));
         jRadioButton2.setText("6 empleados");
 
         jTable_calendarios1.setBackground(new java.awt.Color(223, 223, 223));
@@ -149,7 +160,10 @@ public class jFrame_CalendarStyleyPicker extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable_calendarios1);
         jTable_calendarios1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
+        jRadioButton3.setBackground(new java.awt.Color(79, 92, 106));
         buttonGroup1.add(jRadioButton3);
+        jRadioButton3.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
+        jRadioButton3.setForeground(new java.awt.Color(229, 229, 229));
         jRadioButton3.setText("6 empleados");
 
         jTable_calendarios2.setBackground(new java.awt.Color(223, 223, 223));
@@ -176,7 +190,10 @@ public class jFrame_CalendarStyleyPicker extends javax.swing.JFrame {
         jScrollPane4.setViewportView(jTable_calendarios2);
         jTable_calendarios2.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
+        jRadioButton4.setBackground(new java.awt.Color(79, 92, 106));
         buttonGroup1.add(jRadioButton4);
+        jRadioButton4.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
+        jRadioButton4.setForeground(new java.awt.Color(229, 229, 229));
         jRadioButton4.setText("5 empleados");
 
         jTable_calendarios3.setBackground(new java.awt.Color(223, 223, 223));
@@ -277,9 +294,9 @@ public class jFrame_CalendarStyleyPicker extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButton2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jRadioButton1))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -342,6 +359,10 @@ public class jFrame_CalendarStyleyPicker extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Tienes que selecionar una opción primero");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void ValidarSiHaySuficientesEmpleadosParaModeloSeleccionado(int opc, int weekNumber) {
         ///Valida si hay suficientes empleados
