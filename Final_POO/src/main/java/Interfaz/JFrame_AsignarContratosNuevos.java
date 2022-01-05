@@ -156,6 +156,7 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
         jButton_saveCalendar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
 
         jTable_calendarios0.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

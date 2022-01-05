@@ -10,7 +10,7 @@ public class Principal {
     
     public Principal() {
 
-        Empleado emp1 = new Empleado("17463971A", "Alma", "Swift", "674821998", "06-06-1990", "ES 12 1756 1866 15 2834510863", "Santander");
+        Empleado emp1 = new Empleado("17463971A", "Alma", "Swift", "674821998", "1990-06-06", "ES 12 1756 1866 15 2834510863", "Santander");
         Empleado emp2 = new Empleado("22748614D", "Jorge", "Gomez", "647262553", "2000-12-25", "ES 12 5636 1993 12 3023713562", "BBVA");
         Empleado emp3 = new Empleado("92568301V", "Lucia", "Vegas", "674969402", "1971-10-18", "ES 16 2014 1866 16 2343506463", "Santander");
 	Empleado emp4 = new Empleado("12201438M", "Santiago", "Ross", "624157606", "1998-01-16", "ES 19 1195 1866 19 1053086952", "LiberBank");

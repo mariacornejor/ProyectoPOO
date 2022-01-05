@@ -91,6 +91,7 @@ public class jFrame_CalendarStyleyPicker extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
 
         jTable_calendarios0.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
