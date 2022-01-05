@@ -276,6 +276,7 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
         });
 
         jPanel4.setBackground(new java.awt.Color(79, 92, 106));
+        jPanel4.setRequestFocusEnabled(false);
 
         jLabelNombreSeleccionado.setFont(new java.awt.Font("Gill Sans MT", 1, 24)); // NOI18N
         jLabelNombreSeleccionado.setForeground(new java.awt.Color(229, 229, 229));
