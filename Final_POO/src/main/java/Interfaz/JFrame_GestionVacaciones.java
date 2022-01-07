@@ -324,6 +324,7 @@ public class JFrame_GestionVacaciones extends javax.swing.JFrame {
         if(cantVacaciones[index] >=4)
         {
             JOptionPane.showMessageDialog(this, "Solo puedes tener 4 semanas de vacaciones","Operación Inválida",JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
         if(this.jTable1.getSelectedRow() == -1)
         {
@@ -346,6 +347,11 @@ public class JFrame_GestionVacaciones extends javax.swing.JFrame {
         }
         
         int numSemana = this.jTable1.getSelectedRow() +1;
+        if(numSemana <= this.semanaActual)
+        {
+            JOptionPane.showMessageDialog(this, "No es posible asignar vacaciones de semanas antiguas o actuales","Operación Inválida",JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         c = new Contrato_Vacaciones(numSemana);
         e.getContratos().add(c);
         e.AgregarComentarioHistorial("Vacaciones asignadas para la semana "+numSemana, rootPaneCheckingEnabled);

@@ -232,7 +232,7 @@ public class Gestion_Empresa {
 	}
         
         
-        public void Asignar_Contratos_Automaticamente(HashMap<Integer,Integer> NumContrato_Codigoempleados, int numSemana, int numFormatoCalendario)
+        public void Asignar_Contratos_Automaticamente(HashMap<Integer,Integer> NumContrato_Codigoempleados, int numSemana, ArrayList<Calendario> calendario)
         {
             HashMap<Integer,ArrayList<Turno>> hCodContrato_Turnos = new HashMap();
             
@@ -240,7 +240,7 @@ public class Gestion_Empresa {
                 hCodContrato_Turnos.put(i, new ArrayList<>());
             
             
-            for(Calendario c : get_Opciones_Calendarios_Semanales().get(numFormatoCalendario))
+            for(Calendario c : calendario)
             {
                 hCodContrato_Turnos.get(c.getCod_empleado()).add(new Turno(c.getTurno()));
             }

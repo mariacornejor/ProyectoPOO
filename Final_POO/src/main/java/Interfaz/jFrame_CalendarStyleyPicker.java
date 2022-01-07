@@ -394,7 +394,7 @@ public class jFrame_CalendarStyleyPicker extends javax.swing.JFrame {
         }
         else
         {
-            JFrame nf = new JFrame_AsignarContratosNuevos(opc,weekNumber);
+            JFrame nf = new JFrame_AsignarContratosNuevos(Gestion_Empresa.getInstance().get_Opciones_Calendarios_Semanales().get(opc),weekNumber);
             nf.setVisible(true);
             this.dispose();
         }

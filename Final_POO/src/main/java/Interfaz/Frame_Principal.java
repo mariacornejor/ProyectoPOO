@@ -6,7 +6,6 @@ package Interfaz;
 
 import Aplicacion_de_Gestion.*;
 import Comparadores.CriterioCalendario;
-import Interfaz.Renderers.ColorRenderer;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,6 +92,7 @@ public class Frame_Principal extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jButton_automaticamente = new javax.swing.JButton();
         jButton_manualmente = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jButton_refreshHorarios = new javax.swing.JButton();
         jButton_refreshHorariosCurrentWeek = new javax.swing.JButton();
@@ -418,7 +418,7 @@ public class Frame_Principal extends javax.swing.JFrame {
             jPanel_EmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_EmpleadosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(29, 29, 29)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 784, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(104, 104, 104))
@@ -544,6 +544,13 @@ public class Frame_Principal extends javax.swing.JFrame {
                     .addComponent(jButton_manualmente)))
         );
 
+        jButton1.setText("Volver a generar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -553,17 +560,24 @@ public class Frame_Principal extends javax.swing.JFrame {
                 .addComponent(jScrollPane4)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(434, Short.MAX_VALUE)
+                .addContainerGap(303, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(342, 342, 342))
+                .addGap(133, 133, 133)
+                .addComponent(jButton1)
+                .addGap(136, 136, 136))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(jButton1)))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -955,12 +969,20 @@ public class Frame_Principal extends javax.swing.JFrame {
             }
         }
         switch (ContractNumber) {
-            case 5 -> Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,semanaActualVista,3); ///3 es la opcion de 5 empleados
-            case 6 -> Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,semanaActualVista,0);
-            default -> {
+            case 5:
+                Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,semanaActualVista,
+                        Gestion_Empresa.getInstance().get_Opciones_Calendarios_Semanales().get(3)); ///3 es la opcion de 5 empleados
+                break;
+            case 6:
+                Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,semanaActualVista,
+                    Gestion_Empresa.getInstance().get_Opciones_Calendarios_Semanales().get(0)
+                    );
+                break;
+                
+            default:
                 JOptionPane.showMessageDialog(this, "No hay empleados activos suficientes para generar los turnos. \nPosiblemente alguien esté de vacaciones esa semana o haya que contratar más empleados","Turnos no generados",JOptionPane.INFORMATION_MESSAGE);
                 return;
-            }
+             
         }
 
         this.datosCalendario = Gestion_Empresa.getInstance().Generar_Calendario_ArrayList(this.semanaActualVista);
@@ -986,6 +1008,28 @@ public class Frame_Principal extends javax.swing.JFrame {
         new GenerarPdf().GenerarReporteCantTurnosAcumulados(this.jComboBox_mes__infMensual1.getSelectedIndex(), Integer.parseInt(this.jComboBox_anio_infMensual1.getSelectedItem().toString()));
         
     }//GEN-LAST:event_jButton_generarInformeCantTurnosActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(Gestion_Empresa.getInstance().getSemana_actual() > this.semanaActualVista)
+        {
+            JOptionPane.showMessageDialog(this, "No se pueden actualizar semanas antiguas a la actual","Operación Inválida",JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        if(Gestion_Empresa.getInstance().getEmpleados().size()>4)
+        {
+            for(Empleado e : Gestion_Empresa.getInstance().getEmpleados())
+            {
+                Contrato c = e.getContrato(semanaActualVista);
+                e.getContratos().remove(c);
+            }
+            
+            new jFrame_CalendarStyleyPicker(this.semanaActualVista).setVisible(true);
+            
+        }
+        else
+            JOptionPane.showMessageDialog(this, "No hay empleados activos suficientes para generar los turnos. \nPosiblemente alguien esté de vacaciones esa semana o haya que contratar más empleados","Turnos no generados",JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     
     
@@ -1100,10 +1144,6 @@ public class Frame_Principal extends javax.swing.JFrame {
             model.addRow(rowData);
         }
         
-        
-        
-        
-        
     }
     
     /**
@@ -1148,6 +1188,7 @@ public class Frame_Principal extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton_GenerarInformeCalendario;

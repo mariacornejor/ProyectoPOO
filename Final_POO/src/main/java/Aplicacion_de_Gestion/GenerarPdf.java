@@ -260,6 +260,8 @@ public class GenerarPdf {
         
         
     }
+   
+    
     /**
  * Explanation of the method by which we read the JTable we pass as
  * parameter, and where we copy its content in a PDF passed 

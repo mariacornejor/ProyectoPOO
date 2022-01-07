@@ -4,6 +4,7 @@
  */
 package Aplicacion_de_Gestion;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Principal {
@@ -76,19 +77,26 @@ public class Principal {
             NumContrato_Codigoempleados.put(ContractNumber, e.getCod_empleado());
             ContractNumber++;
         }
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,1,0);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,2,1);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,3,1);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,4,0);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,5,0);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,6,2);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,7,0);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,8,1);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,9,1);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,10,0);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,11,0);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,12,2);
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,13,0);
+        
+        ArrayList<Calendario> cal1 = Gestion_Empresa.getInstance().get_Opciones_Calendarios_Semanales().get(0);
+        ArrayList<Calendario> cal2 = Gestion_Empresa.getInstance().get_Opciones_Calendarios_Semanales().get(1);
+        ArrayList<Calendario> cal3 = Gestion_Empresa.getInstance().get_Opciones_Calendarios_Semanales().get(2);
+
+        
+        
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,1,cal1);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,2,cal2);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,3,cal2);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,4,cal1);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,5,cal1);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,6,cal3);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,7,cal1);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,8,cal2);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,9,cal2);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,10,cal1);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,11,cal1);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,12,cal3);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,13,cal1);
         
 
         

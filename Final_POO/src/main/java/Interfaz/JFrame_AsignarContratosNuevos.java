@@ -18,44 +18,47 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
 
-    private int opc;
     private int weekNumber;
     private HashMap<Integer,Integer> NumContrato_Codigoempleados; 
     private ArrayList<Integer> codigosEmpleadosValidos;    
     private ArrayList<Integer> codigosContratosDisponibles;
     private ArrayList<Calendario> datosCalendario;
+    private Calendario calendarioCambioTurno[];
+    private int posCalendarioCambioTurno;
 
     ///TODO: Si semanaVista< semanaActual!!! Entonces no es posible hacer modificaciones del contrato!!!
     /**
      * Creates new form JFrame_AsignarContratosNuevos
      * @param opc Modelo turnos semanales de los 4 disponibles para elegir 
      */
-    public JFrame_AsignarContratosNuevos(int opc, int weekNumber) {
+    public JFrame_AsignarContratosNuevos(ArrayList<Calendario> calendario, int weekNumber) {
         initComponents();
+        posCalendarioCambioTurno=0;
+        calendarioCambioTurno = new Calendario[2];
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setTitle("Asignar contratos");
+               
         
         this.jComboBox_changeEmpleados1.setEnabled(false);
         this.jComboBox_changeEmpleados2.setEnabled(false);
         this.jButton_ConfirmarCambio.setEnabled(false);
-        
-        
+             
         
         
         this.jComboBox_changeEmpleados1.removeAllItems();
         this.jComboBox_changeEmpleados2.removeAllItems();
         
-        
-        this.opc = opc;
+        this.datosCalendario = calendario;
         this.weekNumber = weekNumber;
-        this.datosCalendario = Gestion_Empresa.getInstance().get_Opciones_Calendarios_Semanales().get(opc);
         
         initData();
+        //initTableData();
         
         RefreshTableCalendarData();
         
     }
+    
 
     
     private void initData() {
@@ -73,12 +76,20 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
         
         ///Inicializo los codigos de contratos
         codigosContratosDisponibles = new ArrayList<>();
-        int cant=6;
-        if(opc == 3)
-            cant = 5;
+        ArrayList<Integer> numerosDistintos =  new ArrayList<>();
+        for(Calendario c: this.datosCalendario)
+        {
+            if(!numerosDistintos.contains(c.getCod_empleado()))
+            {
+                numerosDistintos.add(c.getCod_empleado());
+            }
+        }
         
-        for(int i=0;i<cant;i++)
-            codigosContratosDisponibles.add(i);
+        for(int numContratos : numerosDistintos)
+        {
+            codigosContratosDisponibles.add(numContratos);
+        }
+            
         
         RefreshComboBoxEmpleados();
         RefreshComboBoxContratos();
@@ -183,6 +194,12 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabelNombreSeleccionado = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jButton_cambioTurnos = new javax.swing.JButton();
+        jTextField1_turno1 = new javax.swing.JTextField();
+        jTextField1_turno2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -237,6 +254,11 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
         });
         jTable_calendarios0.setColumnSelectionAllowed(true);
         jTable_calendarios0.getTableHeader().setReorderingAllowed(false);
+        jTable_calendarios0.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable_calendarios0MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable_calendarios0);
         jTable_calendarios0.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
@@ -333,6 +355,30 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(229, 229, 229));
+        jLabel8.setText("Cambiar Turnos");
+
+        jLabel9.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(229, 229, 229));
+        jLabel9.setText("Turno 1 :");
+
+        jLabel10.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(229, 229, 229));
+        jLabel10.setText("Turno 2:");
+
+        jButton_cambioTurnos.setText("Cambio");
+        jButton_cambioTurnos.setBorderPainted(false);
+        jButton_cambioTurnos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_cambioTurnosActionPerformed(evt);
+            }
+        });
+
+        jTextField1_turno1.setEnabled(false);
+
+        jTextField1_turno2.setEnabled(false);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -345,45 +391,56 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(10, 10, 10)))
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBox_Empleados, 0, 120, Short.MAX_VALUE)
-                                    .addComponent(jComboBox_NumeroContratos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(42, 42, 42)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel7)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addGap(10, 10, 10)))
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBox_changeEmpleados1, 0, 111, Short.MAX_VALUE)
-                                    .addComponent(jComboBox_changeEmpleados2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(42, 42, 42)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton_ConfirmarCambio, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap(98, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addGap(10, 10, 10)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBox_NumeroContratos, 0, 120, Short.MAX_VALUE)
+                            .addComponent(jComboBox_Empleados, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel7)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jButton_saveCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(125, 125, 125))))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel8)
+                            .addGap(153, 153, 153))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel9)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jTextField1_turno1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel10)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextField1_turno2, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGap(31, 31, 31)
+                            .addComponent(jButton_cambioTurnos, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel5)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addGap(10, 10, 10)))
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jComboBox_changeEmpleados1, 0, 147, Short.MAX_VALUE)
+                                .addComponent(jComboBox_changeEmpleados2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGap(47, 47, 47)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton_ConfirmarCambio, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -399,13 +456,18 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jComboBox_Empleados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jButton1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jComboBox_NumeroContratos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(8, 8, 8)
@@ -418,23 +480,33 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
                             .addComponent(jComboBox_changeEmpleados2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6)
                             .addComponent(jButton_ConfirmarCambio))
-                        .addGap(42, 42, 42)
-                        .addComponent(jButton_saveCalendar))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8)
+                        .addGap(8, 8, 8)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(jButton_cambioTurnos)
+                            .addComponent(jTextField1_turno1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(jTextField1_turno2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(64, 64, 64)))
+                .addComponent(jButton_saveCalendar)
+                .addGap(20, 20, 20))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -516,7 +588,7 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
             int key1 = Integer.parseInt(model.getValueAt(index1, 2).toString());
             int cantH1 = Integer.parseInt(model.getValueAt(index1, 3).toString());
             
-            String nombre12 = model.getValueAt(index2, 0).toString();
+            String nombre2 = model.getValueAt(index2, 0).toString();
             int codigo2 = Integer.parseInt(model.getValueAt(index2, 1).toString());
             int key2 = Integer.parseInt(model.getValueAt(index2, 2).toString());
             int cantH2 = Integer.parseInt(model.getValueAt(index2, 3).toString());
@@ -533,14 +605,14 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
             }
             
             Object rowData1[] = new Object[4];
-            rowData1[0] = nombre12;
+            rowData1[0] = nombre1;
             rowData1[1] = codigo1;
             rowData1[2] = key2;
             rowData1[3] = cantH2;
             model.addRow(rowData1);
             
             rowData1 = new Object[4];
-            rowData1[0] = nombre1;
+            rowData1[0] = nombre2;
             rowData1[1] = codigo2;
             rowData1[2] = key1;
             rowData1[3] = cantH1;
@@ -553,6 +625,7 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
             this.NumContrato_Codigoempleados.put(key2, codigo1);
             
             RefreshTableCalendarData();
+            RefreshComboBoxCambioEmpleados();
             
             
             JOptionPane.showMessageDialog(this, "Contratos cambiados");
@@ -584,7 +657,7 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
             NumContrato_Codigoempleados.put(numContrato,codigoEmpleado);
         }
         
-        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados, weekNumber, opc);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados, weekNumber, this.datosCalendario);
         JOptionPane.showMessageDialog(this, "Actualiza el calendario", "Contratos generados con éxito", JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
         
@@ -616,6 +689,66 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
                 
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton_cambioTurnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_cambioTurnosActionPerformed
+        // TODO add your handling code here:
+        if(calendarioCambioTurno[0] !=null && calendarioCambioTurno[1]!=null)
+        {
+            int index1 = datosCalendario.indexOf(calendarioCambioTurno[0]);
+            int index2 = datosCalendario.indexOf(calendarioCambioTurno[2]);
+            
+            int temp = datosCalendario.get(index1).getCod_empleado();
+            datosCalendario.get(index1).setCod_empleado( datosCalendario.get(index2).getCod_empleado()   );
+            datosCalendario.get(index2).setCod_empleado(temp);
+            
+            calendarioCambioTurno[0]=null;
+            calendarioCambioTurno[1]=null;
+            JOptionPane.showMessageDialog(this, "Turnos cambiados");
+            UpdateTextFields();
+            RefreshTableCalendarData();
+
+        }
+    }//GEN-LAST:event_jButton_cambioTurnosActionPerformed
+    private void UpdateTextFields()
+    {
+        String headers[] = {"Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"};
+        Calendario cal =null;
+        if(calendarioCambioTurno[0]==null)
+        {
+            this.jTextField1_turno1.setText("");
+        }
+        else
+        {
+            cal = calendarioCambioTurno[0];
+            String item= String.format("%s - %s", headers[cal.getTurno().getDia()] , cal.getTurno().getHorario().toString() );
+            this.jTextField1_turno1.setText(item);
+        }
+        if(calendarioCambioTurno[1]==null)
+        {
+            this.jTextField1_turno2.setText("");
+        }
+        else
+        {
+            cal = calendarioCambioTurno[1];
+            String item= String.format("%s - %s", headers[cal.getTurno().getDia()] , cal.getTurno().getHorario().toString() );
+            this.jTextField1_turno2.setText(item);
+        }
+        
+    }
+    private void jTable_calendarios0MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_calendarios0MouseClicked
+        // TODO add your handling code here:
+        int fila = jTable_calendarios0.getSelectedRow();
+        int col = jTable_calendarios0.getSelectedColumn();
+        if(fila == -1 || col==-1)
+        {
+            return;
+        }
+        
+        calendarioCambioTurno[posCalendarioCambioTurno] = this.datosCalendario.get(fila*7+col);
+        posCalendarioCambioTurno = (posCalendarioCambioTurno+1)%2;
+        UpdateTextFields();
+        
+    }//GEN-LAST:event_jTable_calendarios0MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -646,7 +779,7 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFrame_AsignarContratosNuevos(0,1).setVisible(true);
+                new JFrame_AsignarContratosNuevos(new ArrayList<Calendario>(),1).setVisible(true);
             }
         });
     }
@@ -656,17 +789,21 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton_ConfirmarCambio;
+    private javax.swing.JButton jButton_cambioTurnos;
     private javax.swing.JButton jButton_saveCalendar;
     private javax.swing.JComboBox<String> jComboBox_Empleados;
     private javax.swing.JComboBox<String> jComboBox_NumeroContratos;
     private javax.swing.JComboBox<String> jComboBox_changeEmpleados1;
     private javax.swing.JComboBox<String> jComboBox_changeEmpleados2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelNombreSeleccionado;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -674,6 +811,8 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable_calendarios0;
+    private javax.swing.JTextField jTextField1_turno1;
+    private javax.swing.JTextField jTextField1_turno2;
     // End of variables declaration//GEN-END:variables
 
 
