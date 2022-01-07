@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import Comparadores.CriterioCalendario;
 import java.util.HashMap;
 import java.util.Map;
-
 public class Gestion_Empresa {
     
     private static Gestion_Empresa myInstance = null;
@@ -34,11 +33,12 @@ public class Gestion_Empresa {
 	private ArrayList<ArrayList<Contrato>> lContratosSemanales; ///Backtrackin uses
 
 	public Gestion_Empresa(int semana_actual, String nom_empresa, String direccion, String telefono) {
+                
 		this.semana_actual = semana_actual;
 		this.nom_empresa = nom_empresa;
 		this.direccion = direccion;
 		this.telefono = telefono;
-		this.codigos_empleado = 7; ///Para asisgnar a los empleados
+		this.codigos_empleado = 1; ///Para asisgnar a los empleados
 		this.empleados = new ArrayList<>();
 		this.calendario_Semana_Activa = new ArrayList<>();
 		this.Historial_Cambios_Empresa = new ArrayList<>();

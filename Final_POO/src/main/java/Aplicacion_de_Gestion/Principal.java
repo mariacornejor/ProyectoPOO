@@ -17,7 +17,7 @@ public class Principal {
 	Empleado emp5 = new Empleado("73793113S", "Lana", "Fuentes", "692613093", "1997-11-04", "ES 11 1756 4622 11 5208503966", "BBVA");
         Empleado emp6 = new Empleado("83333071R", "Ronald", "Ris", "692613093", "1999-12-25", "ES 11 1756 4622 55 5208503966", "Santander");
 
-		
+	/*
 	
         for (int i=15; i<20; i++) {
             emp1.AgregarComentarioHistorial("cambió turno "+(Math.random()*100), (((int)(Math.random()*100))%2==0));
@@ -59,7 +59,7 @@ public class Principal {
         emp6.getHistorial_empleado().setCant_contrato_32h(7);
         emp6.getHistorial_empleado().setCant_contrato_40h(2);
         
-        
+        */
         
         
         Gestion_Empresa.getInstance().AgregarEmpleado(emp1);
@@ -81,6 +81,18 @@ public class Principal {
         Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,3,1);
         Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,4,0);
         Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,5,0);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,6,2);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,7,0);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,8,1);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,9,1);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,10,0);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,11,0);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,12,2);
+        Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados,13,0);
+        
+
+        
+        
 
         
 

@@ -356,7 +356,7 @@ public class jFrame_CalendarStyleyPicker extends javax.swing.JFrame {
         {
             ValidarSiHaySuficientesEmpleadosParaModeloSeleccionado(opc,weekNumber);                    
         }else{
-            JOptionPane.showMessageDialog(null, "Tienes que selecionar una opción primero");
+            JOptionPane.showMessageDialog(this, "Tienes que selecionar una opción primero");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -390,7 +390,7 @@ public class jFrame_CalendarStyleyPicker extends javax.swing.JFrame {
     
         if(codigosEmpleadosValidos.size() < codigosContratosDisponibles.size())
         {
-            JOptionPane.showMessageDialog(null, "No hay empleados suficientes para esta opción","Error",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No hay empleados suficientes para esta opción","Error",JOptionPane.INFORMATION_MESSAGE);
         }
         else
         {

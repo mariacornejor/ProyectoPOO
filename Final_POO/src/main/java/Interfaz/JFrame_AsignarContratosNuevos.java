@@ -36,6 +36,11 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setTitle("Asignar contratos");
         
+        this.jComboBox_changeEmpleados1.setEnabled(false);
+        this.jComboBox_changeEmpleados2.setEnabled(false);
+        this.jButton_ConfirmarCambio.setEnabled(false);
+        
+        
         
         
         this.jComboBox_changeEmpleados1.removeAllItems();
@@ -54,7 +59,6 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
 
     
     private void initData() {
-        
         this.NumContrato_Codigoempleados = new HashMap();
         
         ///Inicializo los codigos de empleado
@@ -117,11 +121,35 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
                 Object rowData[]= new Object[7];
                 for(int j=0;j<7;j++)
                 {
-                    rowData[j] = datosCalendario.get(counter++).getCod_empleado();
+                    int codigoContrato = datosCalendario.get(counter++).getCod_empleado();
+                    if(this.NumContrato_Codigoempleados.containsKey(codigoContrato))
+                    {
+                        int codigoEmpleado = this.NumContrato_Codigoempleados.get(codigoContrato);
+                        rowData[j] = codigoContrato + " - "+ Gestion_Empresa.getInstance().getEmpleado(codigoEmpleado).getNombreCompleto();
+                    }
+                    else
+                    {
+                        rowData[j] = codigoContrato;
+                    }
                 }
                 model.addRow(rowData);
             }
         }        
+    }
+    
+    public void RefreshComboBoxCambioEmpleados()
+    {
+        
+        ///Inicializo los combobox
+        this.jComboBox_changeEmpleados1.removeAllItems();
+        this.jComboBox_changeEmpleados2.removeAllItems();
+        
+        DefaultTableModel model = ((DefaultTableModel)this.jTable1.getModel());
+        for(int row=0; row<model.getRowCount() ; row++)
+        {
+            this.jComboBox_changeEmpleados1.addItem(model.getValueAt(row, 1).toString() + " - "+ model.getValueAt(row, 0).toString());
+            this.jComboBox_changeEmpleados2.addItem(model.getValueAt(row, 1).toString() + " - "+ model.getValueAt(row, 0).toString());
+        }
     }
 
     /**
@@ -154,6 +182,7 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
         jButton_saveCalendar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabelNombreSeleccionado = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -297,15 +326,25 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
             .addComponent(jLabelNombreSeleccionado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
         );
 
+        jButton3.setText("Quitar empleado");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(46, 46, 46)
@@ -345,7 +384,6 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton_saveCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(125, 125, 125))))
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -383,7 +421,9 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
                         .addGap(42, 42, 42)
                         .addComponent(jButton_saveCalendar))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 39, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -432,11 +472,14 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
             rowData[2] =codigoContrato ; 
             rowData[3] = cantHoras;
             ((DefaultTableModel)this.jTable1.getModel()).addRow(rowData);
+            
+            RefreshComboBoxCambioEmpleados();
+            RefreshTableCalendarData();
 
         }
         else
         {
-            JOptionPane.showMessageDialog(null, "Ya has asignado todos los contratos","Contratos asignados",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ya has asignado todos los contratos","Contratos asignados",JOptionPane.INFORMATION_MESSAGE);
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -445,40 +488,78 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(this.jTable1.getRowCount() < 2)
         {
-            JOptionPane.showMessageDialog(null, "Necesitas tener más contratos asignados para poder hacer un cambios","Operación Inválida",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Necesitas tener más contratos asignados para poder hacer un cambios","Operación Inválida",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         this.jComboBox_changeEmpleados1.setEnabled(true);
         this.jComboBox_changeEmpleados2.setEnabled(true);
         this.jButton_ConfirmarCambio.setEnabled(true);
         
-        ///Inicializo los combobox
-        this.jComboBox_changeEmpleados1.removeAllItems();
-        this.jComboBox_changeEmpleados2.removeAllItems();
-        
-        DefaultTableModel model = ((DefaultTableModel)this.jTable1.getModel());
-        for(int row=0; row<model.getRowCount() ; row++)
-        {
-            this.jComboBox_changeEmpleados1.addItem(String.valueOf(model.getValueAt(row, 1)));
-            this.jComboBox_changeEmpleados2.addItem(String.valueOf(model.getValueAt(row, 1)));
-        }
-        
+        RefreshComboBoxCambioEmpleados();
         
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton_ConfirmarCambioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConfirmarCambioActionPerformed
         // TODO add your handling code here:
-        int index1,index2;
-        index1 = this.jComboBox_changeEmpleados1.getSelectedIndex();
-        index2 = this.jComboBox_changeEmpleados2.getSelectedIndex();
+
+        int index1 = this.jComboBox_changeEmpleados1.getSelectedIndex();
+        int index2 = this.jComboBox_changeEmpleados2.getSelectedIndex();
+        
         if(index1 != index2)
         {
-            //Cambio valido
+            //Cambio los contratos!
+            DefaultTableModel model = ((DefaultTableModel)this.jTable1.getModel());
+            
+            String nombre1 = model.getValueAt(index1, 0).toString();
+            int codigo1 = Integer.parseInt(model.getValueAt(index1, 1).toString());
+            int key1 = Integer.parseInt(model.getValueAt(index1, 2).toString());
+            int cantH1 = Integer.parseInt(model.getValueAt(index1, 3).toString());
+            
+            String nombre12 = model.getValueAt(index2, 0).toString();
+            int codigo2 = Integer.parseInt(model.getValueAt(index2, 1).toString());
+            int key2 = Integer.parseInt(model.getValueAt(index2, 2).toString());
+            int cantH2 = Integer.parseInt(model.getValueAt(index2, 3).toString());
+            
+            
+            for(int row=0; row<model.getRowCount() ; row++)
+            {
+                int codigoEmpleadoTabla = Integer.parseInt(model.getValueAt(row, 1).toString());
+                if(codigoEmpleadoTabla == codigo1   || codigoEmpleadoTabla == codigo2)
+                {
+                    model.removeRow(row);
+                    row--;
+                }
+            }
+            
+            Object rowData1[] = new Object[4];
+            rowData1[0] = nombre12;
+            rowData1[1] = codigo1;
+            rowData1[2] = key2;
+            rowData1[3] = cantH2;
+            model.addRow(rowData1);
+            
+            rowData1 = new Object[4];
+            rowData1[0] = nombre1;
+            rowData1[1] = codigo2;
+            rowData1[2] = key1;
+            rowData1[3] = cantH1;
+            model.addRow(rowData1);
+            
+            ///Cambios datos en el hashmap
+            this.NumContrato_Codigoempleados.remove(key1);
+            this.NumContrato_Codigoempleados.remove(key2);
+            this.NumContrato_Codigoempleados.put(key1, codigo2);
+            this.NumContrato_Codigoempleados.put(key2, codigo1);
+            
+            RefreshTableCalendarData();
+            
+            
+            JOptionPane.showMessageDialog(this, "Contratos cambiados");
         }
         else
         {
-            
+            JOptionPane.showMessageDialog(this, "Elige codigos de empleados distintos", "No es posible hacer el cambio", JOptionPane.INFORMATION_MESSAGE);
         }
         
         this.jComboBox_changeEmpleados1.setEnabled(false);
@@ -491,7 +572,7 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(this.codigosContratosDisponibles.size()!=0)
         {
-            JOptionPane.showMessageDialog(null, "Es necesario asignar todos los contratos primero", "Datos faltantes", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Es necesario asignar todos los contratos primero", "Datos faltantes", JOptionPane.INFORMATION_MESSAGE);
             return;
         }   
         NumContrato_Codigoempleados = new HashMap<>();
@@ -504,11 +585,36 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
         }
         
         Gestion_Empresa.getInstance().Asignar_Contratos_Automaticamente(NumContrato_Codigoempleados, weekNumber, opc);
-        JOptionPane.showMessageDialog(null, "Actualiza el calendario", "Contratos generados con éxito", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Actualiza el calendario", "Contratos generados con éxito", JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
         
         
     }//GEN-LAST:event_jButton_saveCalendarActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        int row = jTable1.getSelectedRow() ;
+        if(row == -1)
+        {
+            JOptionPane.showMessageDialog(this, "Necesitas seleccionar un empleado de la tabla","Operación Inválida",JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        int numContrato = Integer.parseInt(this.jTable1.getValueAt(row, 2).toString());
+        int codEmpleado = NumContrato_Codigoempleados.get(numContrato);
+        
+        this.codigosContratosDisponibles.add(numContrato);
+        this.codigosEmpleadosValidos.add(codEmpleado);
+        
+        NumContrato_Codigoempleados.remove(numContrato);
+        DefaultTableModel model = (DefaultTableModel)this.jTable1.getModel();
+        model.removeRow(row);              
+        
+        RefreshComboBoxContratos();
+        RefreshComboBoxEmpleados();
+        RefreshComboBoxCambioEmpleados();
+        RefreshTableCalendarData();
+                
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -548,6 +654,7 @@ public class JFrame_AsignarContratosNuevos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton_ConfirmarCambio;
     private javax.swing.JButton jButton_saveCalendar;
     private javax.swing.JComboBox<String> jComboBox_Empleados;

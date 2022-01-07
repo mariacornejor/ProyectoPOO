@@ -6,6 +6,9 @@
 package Interfaz;
 
 import Aplicacion_de_Gestion.*;
+import static java.lang.String.format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 public class JFrame_AltaEmpleado extends javax.swing.JFrame {
@@ -15,6 +18,8 @@ public class JFrame_AltaEmpleado extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setTitle("Alta Empleado");
+               
+        this.jDatefn.setDate(new Date());
    
     }
 
@@ -278,53 +283,56 @@ public class JFrame_AltaEmpleado extends javax.swing.JFrame {
         String nombre = this.jTextNombre.getText();
         String apellido = this.jTextApellido.getText();
         String telefono = this.jTextTelefono.getText();
-        String fn = this.jDatefn.getDateFormatString();
+     
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String fn = format.format( this.jDatefn.getDate() );
+                
         String bc = this.jTextbc.getText();
         String nc = this.jTextnc.getText();
         
         if (dni.length() == 0) {
-            JOptionPane.showMessageDialog(null,"DNI FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,"DNI FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         
         if (nombre.length() == 0) {
-            JOptionPane.showMessageDialog(null,"NOMBRE FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,"NOMBRE FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         
         if (apellido.length() == 0) {
-            JOptionPane.showMessageDialog(null,"APELLIDO FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,"APELLIDO FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         
         if (telefono.length() == 0) {
-            JOptionPane.showMessageDialog(null,"TELEFONO FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,"TELEFONO FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         
         if (fn.length() == 0) {
-            JOptionPane.showMessageDialog(null,"FECHA DE NACIMIENTO FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,"FECHA DE NACIMIENTO FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         
         if (bc.length() == 0) {
-            JOptionPane.showMessageDialog(null,"CUENTA DE BANCO FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,"CUENTA DE BANCO FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         
         if (nc.length() == 0) {
-            JOptionPane.showMessageDialog(null,"NUMERO DE CUENTA FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,"NUMERO DE CUENTA FALTANTE","DATOS FALTANTES",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         
         for (Empleado e: Gestion_Empresa.getInstance().getEmpleados()) {
-            if (e.getDni() == dni){
-                JOptionPane.showMessageDialog(null,"DNI EXISTENTE","DATOS EXISTENTES",JOptionPane.INFORMATION_MESSAGE);
+            if (e.getDni().equals(dni)){
+                JOptionPane.showMessageDialog(this,"DNI EXISTENTE","DATOS EXISTENTES",JOptionPane.INFORMATION_MESSAGE);
                 return;
             } 
             
-            if (e.getNum_cuenta() == nc){
-                JOptionPane.showMessageDialog(null,"NUMERO DE CUENTA EXISTENTE","DATOS EXISTENTES",JOptionPane.INFORMATION_MESSAGE);
+            if (e.getNum_cuenta().equals(nc)){
+                JOptionPane.showMessageDialog(this,"NUMERO DE CUENTA EXISTENTE","DATOS EXISTENTES",JOptionPane.INFORMATION_MESSAGE);
                 return;
             } 
         } 
@@ -332,6 +340,7 @@ public class JFrame_AltaEmpleado extends javax.swing.JFrame {
         Empleado e = new Empleado(dni,nombre,apellido,telefono,fn,bc,nc);
         
         Gestion_Empresa.getInstance().AgregarEmpleado(e);
+        JOptionPane.showMessageDialog(this,"Empleado agregado correctamente, actualiza la tabla de empleados");
         this.dispose();
     }//GEN-LAST:event_jButtonAceptaActionPerformed
 
